@@ -4,13 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task Manager</title>
+    <link rel="stylesheet" href="css/style.css">
   </head>
   <body>
     <h1>Gerenciador de Tarefas</h1>
 
+    <div id="notificacao" class="mensagem" style="display: none;"></div>
+
     <!-- Botões para listar ou cadastrar tarefas -->
-    <button id="btn-listar" onclick="listarTarefas()">Listar Tarefas</button>
-    <button id="btn-cadastrar" onclick="mostrarFormularioCadastro()">Cadastrar Tarefas</button>
+    <div class="botoes-container">
+      <button id="btn-listar" onclick="listarTarefas()">Listar Tarefas</button>
+      <button id="btn-cadastrar" onclick="mostrarFormularioCadastro()">Cadastrar Tarefas</button>
+    </div>
 
     <!-- Área para cadastrar a tarefa -->
     <div id="formulario-cadastro" style="display:none;">
@@ -25,7 +30,11 @@
         <br><br>
 
         <label for="tipo">Tipo:</label>
-        <input type="text" id="tipo" name="tipo" required>
+        <select id="tipo" required>
+          <option value="">Selecione o tipo</option>
+          <option value="Pessoal">Pessoal</option>
+          <option value="Profissional">Profissional</option>
+        </select>
         <br><br>
 
         <label for="dataHora">Data e Hora:</label>

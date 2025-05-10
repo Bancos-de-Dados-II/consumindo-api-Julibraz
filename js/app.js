@@ -19,8 +19,19 @@ function listarTarefas() {
     .then(tarefas => {
       lista.innerHTML = "";
 
+      //ordenando as tarefas pela data 
+      tarefas.sort((a, b) => new Date(a.dataHora) - new Date(b.dataHora));
+
       tarefas.forEach(tarefa => {
         const div = document.createElement("div");
+
+        //classe de estilo com base no tipo
+      if (tarefa.tipo === "Pessoal") {
+      div.classList.add("tipo-pessoal");
+      } else if (tarefa.tipo === "Profissional") {
+        div.classList.add("tipo-profissional");
+      }
+        
       
         const titulo = document.createElement("strong");
         titulo.textContent = tarefa.titulo;
@@ -33,11 +44,13 @@ function listarTarefas() {
       
         const tipo = document.createElement("p");
         tipo.textContent = `Tipo: ${tarefa.tipo}`;
-      
+
+        //botão de exclusão
         const botaoExcluir = document.createElement("button");
         botaoExcluir.textContent = "🗑️";
         botaoExcluir.addEventListener("click", () => deletarTarefa(tarefa.id));
 
+        //botão para editar tarefa
         const botaoEditar = document.createElement("button");
         botaoEditar.textContent = "✏️";
         botaoEditar.addEventListener("click", () => editarTarefa(tarefa));
@@ -71,7 +84,7 @@ function deletarTarefa(id){
     })
     .then(() => {
       listarTarefas();  
-      alert("Tarefa excluída com sucesso!");
+      mostrarMensagem("Tarefa excluída com sucesso!");
       listaVisivel = true;  
       document.getElementById("lista-tarefas").style.display = "block";
     })
@@ -125,7 +138,7 @@ function cadastrarTarefa(event) {
   const dataSelecionada = new Date(dataHora);
 
   if(dataSelecionada < agora){
-    alert("A data e hora da tarefa não podem estar no passado!");
+    mostrarMensagem("A data e hora da tarefa não podem estar no passado!", "erro");
     return;
   }
 
@@ -152,9 +165,9 @@ function cadastrarTarefa(event) {
 
       //mensagem de sucesso
       if(modoEdicao){
-        alert("Tarefa editada com sucesso!");
+        mostrarMensagem("Tarefa editada com sucesso!");
       }else{
-        alert("Tarefa cadastrada com sucesso!");
+        mostrarMensagem("Tarefa cadastrada com sucesso!");
       }
 
       //Reseta o modo de edição
@@ -181,4 +194,24 @@ function cancelar() {
   document.getElementById("btn-submit").textContent = "Cadastrar";
   modoEdicao = false;
   idEdicao = null;
+}
+
+function mostrarMensagem(texto, tipo = "sucesso") {
+  const notificacao = document.getElementById("notificacao");
+  
+  // Define o conteúdo e a classe de estilo com base no tipo
+  notificacao.textContent = texto;
+  notificacao.className = "mensagem " + tipo; // Adiciona ambas as classes
+  
+  // Torna a mensagem visível
+  notificacao.style.display = "block";
+  notificacao.style.opacity = 1;
+
+  // Oculta a mensagem após 3 segundos
+  setTimeout(() => {
+    notificacao.style.opacity = 0;
+    setTimeout(() => {
+      notificacao.style.display = "none";
+    }, 500); // Tempo da animação de fade
+  }, 3000);
 }
